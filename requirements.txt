@@ -2,3 +2,4 @@ Django==4.0.5
 django-cors-headers==3.13.0
 ipython==8.4.0
 mysqlclient==2.1.0
+bcrypt==3.2.2
