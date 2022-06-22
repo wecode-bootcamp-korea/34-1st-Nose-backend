@@ -11,7 +11,7 @@ from users.models import User
 class SignInView(View) :
     def post(self, request) :
         try:
-            data          = json.loads[request.body]
+            data          = json.loads(request.body)
             user_account  = data["account"]
             user_password = data["password"]
 
