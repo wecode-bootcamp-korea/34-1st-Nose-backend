@@ -8,7 +8,7 @@ class User(TimeStampModel):
     email        = models.CharField(max_length=255, unique=True)
     phone_number = models.CharField(max_length=45, unique=True)
     password     = models.CharField(max_length=500)
-    point        = models.CharField(max_length=100, default="100000")
+    point        = models.DecimalField(max_digits=8, decimal_places=2, default=100000.00)
 
     class Meta:
         db_table = "users"
