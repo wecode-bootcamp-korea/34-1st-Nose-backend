@@ -9,7 +9,7 @@ def validate_account(value) :
         raise ValidationError("INVALID_ACCOUNT")
 
 def validate_email(value) :
-    EMAIL_CHECK =  "^\w+([-+.]\w+)*@\W+([-.]\W+)*\.\W+([-.]\W+)*&"
+    EMAIL_CHECK =  "^[a-zA-Z0-9+_.]+@[a-zA-Z0-9-]+.[a-zA-Z]{2,3}$"
 
     if not re.match(EMAIL_CHECK, value) :
         raise ValidationError("INVALID_EMAIL")
