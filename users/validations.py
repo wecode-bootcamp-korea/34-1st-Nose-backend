@@ -21,7 +21,7 @@ def validate_phone_number(value) :
         raise ValidationError("INVALID_NUMBER")
 
 def validate_password(value) :
-    PW_CHECK = "^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$"
+    PW_CHECK = "^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
 
     if not re.match(PW_CHECK, value) :
         raise ValidationError("INVALID_PASSWORD")
