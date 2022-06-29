@@ -10,7 +10,7 @@ class ProductListView(View) :
             fragrance_id = request.GET.get("fragrance")
             category_id  = request.GET.get("category")
 
-            q= Q()
+            q = Q()
 
             if fragrance_id :
                 q &= Q(fragrances__id = fragrance_id)
