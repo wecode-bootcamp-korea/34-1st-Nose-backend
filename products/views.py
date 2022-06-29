@@ -9,16 +9,27 @@ class ProductListView(View) :
         try:
             fragrance_id = request.GET.get("fragrance")
             category_id  = request.GET.get("category")
+            offset       = int(request.GET.get("offset", 0))
+            limit        = int(request.GET.get("limit", 6))
 
-            q = Q()
+            # q = Q()
 
-            if fragrance_id :
-                q &= Q(fragrances__id = fragrance_id)
+            # if fragrance_id :
+            #     q &= Q(fragrances__id = fragrance_id)
             
-            if category_id :
-                q &= Q(category = category_id)
+            # if category_id :
+            #     q &= Q(category = category_id)
+
+            filter_set = {
+                "fragrance_id" : "fragrances__id",
+                "category_id"  : "category"
+            }
+
+            filter = {
+                filter_set.get(key) : value for key, value in request.GET.items() if filter_set.get(key)
+            }
             
-            products = Product.objects.filter(q)
+            products = Product.objects.filter(**filter)[offset:offset+limit]
 
             perfume_list = [
                 {
