@@ -1,24 +1,24 @@
 from django.views     import View
 from django.http      import JsonResponse
-from django.db.models import Q
 
 from products.models  import Product, ThumbNailImage
 
 class ProductListView(View) :
     def get(self, request) :
         try:
-            fragrance_id = request.GET.get("fragrance")
-            category_id  = request.GET.get("category")
+            offset       = request.GET.get("offset", 0)
+            limit        = request.GET.get("limit", 16)
 
-            q = Q()
+            filter_set = {
+                "fragrance" : "fragrances__id",
+                "category"  : "category_id"
+            }
 
-            if fragrance_id :
-                q &= Q(fragrances__id = fragrance_id)
-            
-            if category_id :
-                q &= Q(category = category_id)
-            
-            products = Product.objects.filter(q)
+            filter = {
+                filter_set.get(key) : value for key, value in request.GET.items() if filter_set.get(key)
+            }
+
+            products = Product.objects.filter(**filter)[offset:offset+limit]
 
             perfume_list = [
                 {
@@ -33,4 +33,4 @@ class ProductListView(View) :
             return JsonResponse({"perfume_list": perfume_list}, status=200)
 
         except ThumbNailImage.DoesNotExist:
-            return JsonResponse({"message": "NONE_THUMB_NAIL_IMAGE"}, status=400)
+            return JsonResponse({"message": "NONE_IMAGES"}, status=400)
