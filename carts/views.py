@@ -12,15 +12,15 @@ class CartView(View):
     @token_decorator
     def post(self, request):
         try:        
-            data                = json.loads(request.body)
-            quantity            = data['quantity']
-            product_id          = data['product_id']
-            user                = request.user
-
-            cart, is_created    = Cart.objects.get_or_create(
-                user            = user, 
-                product         = product_id,
-                defaults        = {
+            data       = json.loads(request.body)
+            quantity   = data['quantity']
+            product_id = data['product_id']
+            user       = request.user
+            
+            cart, is_created  = Cart.objects.get_or_create(
+                user          = user, 
+                product_id    = product_id,
+                defaults      = {
                     "quantity" : quantity
                 }
             )
@@ -37,8 +37,9 @@ class CartView(View):
     @token_decorator
     def get(self, request):
         try:
-            user    = request.user 
-            carts   = Cart.objects.filter(user_id=user.id)
+            user  = request.user 
+            carts = Cart.objects.filter(user_id=user.id)
+
             results = [{
                     'id'           : cart.product.id,
                     'itemName'     : cart.product.name,
@@ -46,7 +47,7 @@ class CartView(View):
                     'quantity'     : cart.quantity,
                     'cart_id'      : cart.id,
                     'price'        : cart.product.price
-                    }for cart in carts]
+                    } for cart in carts ]
 
             return JsonResponse({'results': results}, status=200)
 
@@ -58,6 +59,7 @@ class CartView(View):
         try:
             user     = request.user
             cart_ids = request.GET.getlist('cart_id')
+
             carts    = Cart.objects.filter(id__in=cart_ids, user_id=user.id)
 
             if not carts:
@@ -66,5 +68,6 @@ class CartView(View):
             carts.delete()
 
             return JsonResponse({'message': 'DELETE_SUCCESS'}, status=201)
+        
         except Cart.DoesNotExist:
             return JsonResponse({'message': 'CART_DOES_NOT_EXIST'}, status=405)                  
