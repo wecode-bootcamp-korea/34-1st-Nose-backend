@@ -12,14 +12,14 @@ class CartView(View):
     @token_decorator
     def post(self, request):
         try:        
-            data            = json.loads(request.body)
-            quantity        = data['quantity']
-            product_id      = data['product_id']
-            user            = request.user
-    
-            cart, is_created = Cart.objects.get_or_create(
+            data                = json.loads(request.body)
+            quantity            = data['quantity']
+            product_id          = data['product_id']
+            user                = request.user
+
+            cart, is_created    = Cart.objects.get_or_create(
                 user            = user, 
-                product_id      = product_id,
+                product         = product_id,
                 defaults        = {
                     "quantity" : quantity
                 }
@@ -37,14 +37,15 @@ class CartView(View):
     @token_decorator
     def get(self, request):
         try:
-            user    = request.user
+            user    = request.user 
             carts   = Cart.objects.filter(user_id=user.id)
             results = [{
-                    'product_id'   : cart.product.id,
-                    'product_name' : cart.product.name,
-                    'image_url'    : cart.product.thumbnailimage_set.get(product_id=cart.product.id).thumb_nail_img_url,
+                    'id'           : cart.product.id,
+                    'itemName'     : cart.product.name,
+                    'thumbnail_img': cart.product.thumbnailimage_set.get(product_id=cart.product.id).thumb_nail_img_url,
                     'quantity'     : cart.quantity,
-                    'cart_id'      : cart.id
+                    'cart_id'      : cart.id,
+                    'price'        : cart.product.price
                     }for cart in carts]
 
             return JsonResponse({'results': results}, status=200)
@@ -60,10 +61,10 @@ class CartView(View):
             carts    = Cart.objects.filter(id__in=cart_ids, user_id=user.id)
 
             if not carts:
-                return JsonResponse({'message' : 'NOT EXIST CART'}, status=400)
+                return JsonResponse({'message' : 'NOT_EXIST_CART'}, status=400)
 
             carts.delete()
 
-            return JsonResponse({'message': 'DELETE SUCCESS'}, status=201)
+            return JsonResponse({'message': 'DELETE_SUCCESS'}, status=201)
         except Cart.DoesNotExist:
-            return JsonResponse({'message': 'Cart.DoesNotExist'}, status=404)                  
+            return JsonResponse({'message': 'CART_DOES_NOT_EXIST'}, status=405)                  
