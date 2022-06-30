@@ -10,7 +10,7 @@ class ProductListView(View) :
             limit        = request.GET.get("limit", 16)
 
             filter_set = {
-                "fragrance" : "fragrances__id",
+                "fragrance" : "fragrances__name",
                 "category"  : "category_id"
             }
 
@@ -26,7 +26,8 @@ class ProductListView(View) :
                     "name"          : product.name,
                     "price"         : product.price,
                     "thumbnail_img" : ThumbNailImage.objects.get(product_id=product.id).thumb_nail_img_url,
-                    "tags"          : [ tag.name for tag in product.tags.all() ]
+                    "tags"          : [ tag.name for tag in product.tags.all() ],
+                    "category"      : [ fragrance.name for fragrance in product.fragrances.all()] + ["All"],
                 } for product in products
             ]
 
