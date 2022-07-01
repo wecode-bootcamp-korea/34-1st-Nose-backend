@@ -46,6 +46,7 @@ class ProductDetailView(View):
                 "product_id"   : product.id,
                 "name"         : product.name,
                 "price"        : product.price,
+                "quantity"     : 1,
                 "main_img_url" : [ main_image.main_page_img_url for main_image in main_images ]
             }
 
