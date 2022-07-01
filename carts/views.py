@@ -37,7 +37,7 @@ class CartView(View):
     @token_decorator
     def get(self, request):
         try:
-            user  = request.user 
+            user  = request.user
             carts = Cart.objects.filter(user_id=user.id)
 
             results = [{
