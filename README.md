@@ -1,4 +1,4 @@
-## ✅ 프로젝트 소개
+## ✅ 프로젝트 Repository 개요
 
 <p align="center">
   <br>
